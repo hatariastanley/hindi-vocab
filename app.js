@@ -4,69 +4,10 @@
   const WORDS_KEY = 'hindiFlashcards.words.v1';
   const ACTIVITY_KEY = 'hindiFlashcards.activity.v1';
   const MAX_DECK_SIZE = 12;
+  const DEFAULTS_VERSION = 2;
+  const DEFAULTS_VERSION_KEY = 'hindiFlashcards.defaultsVersion.v1';
 
-  const DEFAULT_WORDS = [
-    {
-      id: 'default-mango',
-      english: 'mango',
-      hindi: 'आम',
-      transliteration: 'aam',
-      emoji: '🥭',
-      image: 'assets/mango.webp',
-      audio: 'assets/audio/aam.mp3',
-      active: true,
-      box: 1,
-      correct: 0,
-      incorrect: 0,
-      lastSeen: null,
-      createdAt: Date.now()
-    },
-    {
-      id: 'default-milk',
-      english: 'milk',
-      hindi: 'दूध',
-      transliteration: 'doodh',
-      emoji: '🥛',
-      image: 'assets/milk.webp',
-      audio: 'assets/audio/doodh.mp3',
-      active: true,
-      box: 1,
-      correct: 0,
-      incorrect: 0,
-      lastSeen: null,
-      createdAt: Date.now()
-    },
-    {
-      id: 'default-water',
-      english: 'water',
-      hindi: 'पानी',
-      transliteration: 'pani',
-      emoji: '💧',
-      image: 'assets/water.webp',
-      audio: 'assets/audio/pani.mp3',
-      active: true,
-      box: 1,
-      correct: 0,
-      incorrect: 0,
-      lastSeen: null,
-      createdAt: Date.now()
-    },
-    {
-      id: 'default-daily',
-      english: 'daily / every day',
-      hindi: 'रोज़',
-      transliteration: 'roz',
-      emoji: '📅',
-      image: 'assets/daily.webp',
-      audio: 'assets/audio/roz.mp3',
-      active: true,
-      box: 1,
-      correct: 0,
-      incorrect: 0,
-      lastSeen: null,
-      createdAt: Date.now()
-    }
-  ];
+  const DEFAULT_WORDS = window.HINDI_SEED_WORDS || [];
 
   const $ = (id) => document.getElementById(id);
   const cardStage = $('cardStage');
@@ -76,6 +17,7 @@
   const imagePreview = $('imagePreview');
 
   let words = loadWords();
+  mergeMissingSeedWords();
   let activity = loadActivity();
   let deck = [];
   let deckIndex = 0;
@@ -154,6 +96,38 @@
 
   function saveWords() {
     localStorage.setItem(WORDS_KEY, JSON.stringify(words));
+  }
+
+  function mergeMissingSeedWords() {
+    const storedVersion = Number(localStorage.getItem(DEFAULTS_VERSION_KEY) || 0);
+    if (storedVersion >= DEFAULTS_VERSION) return;
+
+    const byId = new Map(words.map((word) => [word.id, word]));
+    const byKey = new Map(words.map((word) => [wordKey(word), word]));
+    let changed = false;
+
+    DEFAULT_WORDS.forEach((seed, index) => {
+      const normalized = normalizeWord(seed, words.length + index);
+      const existing = byId.get(normalized.id) || byKey.get(wordKey(normalized));
+
+      if (!existing) {
+        words.push(normalized);
+        byId.set(normalized.id, normalized);
+        byKey.set(wordKey(normalized), normalized);
+        changed = true;
+        return;
+      }
+
+      ['transliteration', 'emoji', 'image', 'audio'].forEach((field) => {
+        if (!existing[field] && normalized[field]) {
+          existing[field] = normalized[field];
+          changed = true;
+        }
+      });
+    });
+
+    if (changed) saveWords();
+    localStorage.setItem(DEFAULTS_VERSION_KEY, String(DEFAULTS_VERSION));
   }
 
   function loadActivity() {
