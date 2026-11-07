@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hindi Flashcards</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">🌈 Hindi Flashcards</div>
+      <nav class="tabs" aria-label="Main navigation">
+        <button class="tab active" data-tab="play" type="button">Play</button>
+        <button class="tab" data-tab="words" type="button">Words</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="playView" class="view active" aria-label="Flashcard practice">
+        <div class="stats-bar" aria-label="Today's progress">
+          <div class="stat">
+            <span class="stat-icon" aria-hidden="true">⭐</span>
+            <strong id="statPoints">0</strong>
+            <span>points</span>
+          </div>
+          <div class="stat">
+            <span class="stat-icon" aria-hidden="true">✅</span>
+            <strong id="statCorrect">0</strong>
+            <span>got it</span>
+          </div>
+          <div class="stat">
+            <span class="stat-icon" aria-hidden="true">🔁</span>
+            <strong id="statPractice">0</strong>
+            <span>practice</span>
+          </div>
+          <div class="stat">
+            <span class="stat-icon" aria-hidden="true">🔥</span>
+            <strong id="statStreak">0</strong>
+            <span>day streak</span>
+          </div>
+        </div>
+
+        <div id="cardStage" class="card-stage"></div>
+        <div id="celebration" class="celebration" aria-hidden="true"></div>
+      </section>
+
+      <section id="wordsView" class="view" aria-label="Word management">
+        <div class="words-header">
+          <div>
+            <h1>Word list</h1>
+            <p class="hint">Add the words your child is learning. Upload a picture or paste an image link.</p>
+          </div>
+          <div class="words-actions">
+            <button id="exportWords" class="secondary" type="button">Export</button>
+            <button id="importWords" class="secondary" type="button">Import</button>
+            <input id="importFile" type="file" accept="application/json,.json" hidden>
+            <button id="addWordBtn" class="primary" type="button">+ Add word</button>
+          </div>
+        </div>
+
+        <div id="wordFormWrap" class="word-form-wrap hidden">
+          <form id="wordForm" class="word-form">
+            <input id="wordId" type="hidden">
+            <label>
+              English meaning
+              <input id="fEnglish" type="text" maxlength="60" placeholder="mango" required>
+            </label>
+            <label>
+              Hindi word
+              <input id="fHindi" type="text" maxlength="40" placeholder="आम" required>
+            </label>
+            <label>
+              Say it like
+              <input id="fTransliteration" type="text" maxlength="60" placeholder="aam">
+            </label>
+            <label>
+              Emoji fallback
+              <input id="fEmoji" type="text" maxlength="8" placeholder="🥭">
+            </label>
+            <label>
+              Image link
+              <input id="fImageUrl" type="text" placeholder="assets/mango.webp or https://...">
+            </label>
+            <label>
+              Or upload picture
+              <input id="fImageFile" type="file" accept="image/*">
+            </label>
+            <div id="imagePreview" class="image-preview hidden"></div>
+            <label class="checkbox">
+              <input id="fActive" type="checkbox" checked>
+              Active in flashcards
+            </label>
+            <div class="form-actions">
+              <button class="primary" type="submit">Save word</button>
+              <button id="cancelWord" class="secondary" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="wordList" class="word-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
