@@ -11,36 +11,45 @@
     <header class="topbar">
       <div class="brand">🌈 Hindi Flashcards</div>
       <nav class="tabs" aria-label="Main navigation">
-        <button class="tab active" data-tab="play" type="button">Play</button>
+        <button class="tab active" data-tab="talk" type="button">Talk</button>
+        <button class="tab" data-tab="play" type="button">Play</button>
         <button class="tab" data-tab="words" type="button">Words</button>
       </nav>
     </header>
 
     <main>
-      <section id="playView" class="view active" aria-label="Flashcard practice">
-        <div class="stats-bar" aria-label="Today's progress">
-          <div class="stat">
-            <span class="stat-icon" aria-hidden="true">⭐</span>
-            <strong id="statPoints">0</strong>
-            <span>points</span>
-          </div>
-          <div class="stat">
-            <span class="stat-icon" aria-hidden="true">✅</span>
-            <strong id="statCorrect">0</strong>
-            <span>got it</span>
-          </div>
-          <div class="stat">
-            <span class="stat-icon" aria-hidden="true">🔁</span>
-            <strong id="statPractice">0</strong>
-            <span>practice</span>
-          </div>
-          <div class="stat">
-            <span class="stat-icon" aria-hidden="true">🔥</span>
-            <strong id="statStreak">0</strong>
-            <span>day streak</span>
-          </div>
+      <div class="stats-bar" aria-label="Today's progress">
+        <div class="stat">
+          <span class="stat-icon" aria-hidden="true">⭐</span>
+          <strong id="statPoints">0</strong>
+          <span>points</span>
         </div>
+        <div class="stat">
+          <span class="stat-icon" aria-hidden="true">✅</span>
+          <strong id="statCorrect">0</strong>
+          <span>got it</span>
+        </div>
+        <div class="stat">
+          <span class="stat-icon" aria-hidden="true">🔁</span>
+          <strong id="statPractice">0</strong>
+          <span>practice</span>
+        </div>
+        <div class="stat">
+          <span class="stat-icon" aria-hidden="true">🔥</span>
+          <strong id="statStreak">0</strong>
+          <span>day streak</span>
+        </div>
+      </div>
 
+      <section id="talkView" class="view active" aria-label="Conversation practice">
+        <div class="talk-intro">
+          <h1>Let's talk!</h1>
+          <p class="hint">Toggle English/हिंदी, listen, and say each phrase out loud.</p>
+        </div>
+        <div id="talkStage" class="card-stage conversation-stage"></div>
+      </section>
+
+      <section id="playView" class="view" aria-label="Flashcard practice">
         <div id="cardStage" class="card-stage"></div>
         <div id="celebration" class="celebration" aria-hidden="true"></div>
       </section>

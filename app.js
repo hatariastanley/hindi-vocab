@@ -8,9 +8,24 @@
   const DEFAULTS_VERSION_KEY = 'hindiFlashcards.defaultsVersion.v1';
 
   const DEFAULT_WORDS = window.HINDI_SEED_WORDS || [];
+  const CONVERSATION_IDS = [
+    'seed-hello',
+    'seed-how-are-you',
+    'seed-i-am-fine',
+    'seed-whats-your-name',
+    'seed-see-you-again',
+    'seed-thank-you',
+    'seed-please',
+    'seed-sure',
+    'seed-what',
+    'seed-where',
+    'seed-what-time',
+    'seed-okay'
+  ];
 
   const $ = (id) => document.getElementById(id);
   const cardStage = $('cardStage');
+  const talkStage = $('talkStage');
   const wordList = $('wordList');
   const wordForm = $('wordForm');
   const wordFormWrap = $('wordFormWrap');
@@ -24,6 +39,8 @@
   let revealed = false;
   let session = { correct: 0, practice: 0 };
   let pendingImageDataUrl = null;
+  let conversationIndex = 0;
+  let conversationLang = 'english';
 
   function escapeHtml(value) {
     return String(value ?? '')
@@ -344,19 +361,19 @@
     renderCard();
   }
 
-  function recordResult(word, result) {
+  function recordResult(word, result, countSession = true) {
     const points = result === 'correct' ? 10 + (word.box || 1) * 2 : 2;
     const today = todayActivity(true);
 
     if (result === 'correct') {
       word.correct += 1;
       today.correct += 1;
-      session.correct += 1;
+      if (countSession) session.correct += 1;
       word.box = Math.min(3, (word.box || 1) + 1);
     } else {
       word.incorrect += 1;
       today.practice += 1;
-      session.practice += 1;
+      if (countSession) session.practice += 1;
       word.box = Math.max(1, (word.box || 1) - 1);
     }
 
@@ -398,6 +415,113 @@
       return;
     }
     speak(word.hindi, 'hi-IN', 0.82);
+  }
+
+  function conversationWords() {
+    return CONVERSATION_IDS
+      .map((id) => findWord(id))
+      .filter((word) => word && word.active);
+  }
+
+  function renderConversation() {
+    const deck = conversationWords();
+    if (deck.length === 0) {
+      talkStage.innerHTML = `
+        <div class="empty-card">
+          <h2>No conversation phrases yet</h2>
+          <p class="hint">The starter conversation words are missing. You can re-import them from the Words tab.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const index = ((conversationIndex % deck.length) + deck.length) % deck.length;
+    const word = deck[index];
+    const isHindi = conversationLang === 'hindi';
+    const mainText = isHindi ? word.hindi : word.english;
+    const subText = isHindi ? word.transliteration : '';
+
+    talkStage.innerHTML = `
+      <div class="flashcard conversation-card">
+        <div class="conversation-topline">
+          <span class="conversation-badge">💬 Phrase ${index + 1} of ${deck.length}</span>
+          <div class="lang-toggle" role="group" aria-label="Choose language">
+            <button class="lang-pill${conversationLang === 'english' ? ' active' : ''}" type="button" data-action="talk-lang-english">English</button>
+            <button class="lang-pill${conversationLang === 'hindi' ? ' active' : ''}" type="button" data-action="talk-lang-hindi">हिंदी</button>
+          </div>
+        </div>
+        <div class="conversation-bubble ${isHindi ? 'hindi' : 'english'}">
+          <div class="conversation-speaker" aria-hidden="true">${isHindi ? '🧒' : '🧑'}</div>
+          <div class="conversation-body">
+            <p class="conversation-text">${escapeHtml(mainText)}</p>
+            ${subText ? `<div class="transliteration">${escapeHtml(subText)}</div>` : ''}
+          </div>
+        </div>
+        <p class="hint">Toggle the language, listen, then say it out loud.</p>
+        <div class="actions">
+          <button class="btn secondary" type="button" data-action="talk-hear-english">🔊 English</button>
+          <button class="btn secondary" type="button" data-action="talk-hear-hindi">🔊 Hindi</button>
+        </div>
+        <div class="actions">
+          <button class="btn good" type="button" data-action="talk-correct">✅ Got it</button>
+          <button class="btn practice-btn" type="button" data-action="talk-practice">🔁 Practice</button>
+          <button class="btn secondary" type="button" data-action="talk-prev">⬅️ Back</button>
+          <button class="btn primary" type="button" data-action="talk-next">Next ➡️</button>
+        </div>
+        <div class="actions conversation-reset">
+          <button class="btn secondary" type="button" data-action="talk-restart">↩️ Start over</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function handleTalkAction(action) {
+    const deck = conversationWords();
+    if (deck.length === 0) return;
+
+    const index = ((conversationIndex % deck.length) + deck.length) % deck.length;
+    const word = deck[index];
+
+    switch (action) {
+      case 'talk-lang-english':
+        conversationLang = 'english';
+        renderConversation();
+        break;
+      case 'talk-lang-hindi':
+        conversationLang = 'hindi';
+        renderConversation();
+        break;
+      case 'talk-hear-english':
+        speak(word.english, 'en-US', 0.95);
+        break;
+      case 'talk-hear-hindi':
+        speakHindi(word);
+        break;
+      case 'talk-correct':
+        recordResult(word, 'correct', false);
+        conversationIndex += 1;
+        renderConversation();
+        break;
+      case 'talk-practice':
+        recordResult(word, 'practice', false);
+        conversationIndex += 1;
+        renderConversation();
+        break;
+      case 'talk-next':
+        conversationIndex += 1;
+        renderConversation();
+        break;
+      case 'talk-prev':
+        conversationIndex -= 1;
+        renderConversation();
+        break;
+      case 'talk-restart':
+        conversationIndex = 0;
+        renderConversation();
+        break;
+      default:
+        break;
+    }
   }
 
   function handleCardAction(action) {
@@ -461,8 +585,11 @@
     document.querySelectorAll('.tab').forEach((tab) => {
       tab.classList.toggle('active', tab.dataset.tab === tabName);
     });
+    $('talkView').classList.toggle('active', tabName === 'talk');
     $('playView').classList.toggle('active', tabName === 'play');
     $('wordsView').classList.toggle('active', tabName === 'words');
+    if (tabName === 'talk') renderConversation();
+    renderStats();
   }
 
   function renderWordList() {
@@ -646,6 +773,12 @@
     handleCardAction(button.dataset.action);
   });
 
+  talkStage.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-action]');
+    if (!button) return;
+    handleTalkAction(button.dataset.action);
+  });
+
   wordList.addEventListener('click', (event) => {
     const button = event.target.closest('[data-action]');
     if (!button) return;
@@ -732,5 +865,6 @@
 
   renderStats();
   renderWordList();
+  renderConversation();
   startPlay();
 })();
