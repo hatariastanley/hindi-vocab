@@ -4,7 +4,7 @@
   const WORDS_KEY = 'hindiFlashcards.words.v1';
   const ACTIVITY_KEY = 'hindiFlashcards.activity.v1';
   const MAX_DECK_SIZE = 12;
-  const DEFAULTS_VERSION = 2;
+  const DEFAULTS_VERSION = 3;
   const DEFAULTS_VERSION_KEY = 'hindiFlashcards.defaultsVersion.v1';
 
   const DEFAULT_WORDS = window.HINDI_SEED_WORDS || [];
@@ -20,13 +20,28 @@
     'seed-what',
     'seed-where',
     'seed-what-time',
-    'seed-okay'
+    'seed-okay',
+    'seed-namaskar',
+    'seed-sorry',
+    'seed-yes',
+    'seed-no',
+    'seed-aap-kaise-hain',
+    'seed-my-name-simmi',
+    'seed-i-need-water',
+    'seed-i-need-apple',
+    'seed-what-is-this',
+    'seed-yes-i-am-fine',
+    'seed-listen',
+    'seed-come-here',
+    'seed-shukriya',
+    'seed-i-am-ravi'
   ];
 
   const $ = (id) => document.getElementById(id);
   const cardStage = $('cardStage');
   const talkStage = $('talkStage');
   const wordList = $('wordList');
+  const wordSearch = $('wordSearch');
   const wordForm = $('wordForm');
   const wordFormWrap = $('wordFormWrap');
   const imagePreview = $('imagePreview');
@@ -41,6 +56,7 @@
   let pendingImageDataUrl = null;
   let conversationIndex = 0;
   let conversationLang = 'english';
+  let wordSearchQuery = '';
 
   function escapeHtml(value) {
     return String(value ?? '')
@@ -592,13 +608,24 @@
     renderStats();
   }
 
+  function filteredWords() {
+    const query = wordSearchQuery.trim().toLowerCase();
+    if (!query) return words;
+    return words.filter((word) => [word.english, word.hindi, word.transliteration]
+      .some((field) => String(field || '').toLowerCase().includes(query)));
+  }
+
   function renderWordList() {
-    if (words.length === 0) {
-      wordList.innerHTML = '<div class="empty-card"><h2>No words yet</h2><p class="hint">Use the Add word button to create your first flashcard.</p></div>';
+    const visibleWords = filteredWords();
+    if (visibleWords.length === 0) {
+      const hasWords = words.length > 0;
+      const title = hasWords ? 'No matches' : 'No words yet';
+      const hint = hasWords ? 'Try a different search.' : 'Use the Add word button to create your first flashcard.';
+      wordList.innerHTML = `<div class="empty-card"><h2>${title}</h2><p class="hint">${hint}</p></div>`;
       return;
     }
 
-    wordList.innerHTML = words.map((word) => {
+    wordList.innerHTML = visibleWords.map((word) => {
       const image = safeImageUrl(word.image);
       const thumb = image
         ? `<img src="${escapeHtml(image)}" alt="">`
@@ -620,6 +647,7 @@
             ${word.active ? '' : '<span class="badge inactive">Inactive</span>'}
           </div>
           <div class="word-actions">
+            <button class="btn secondary" type="button" data-action="listen-word" data-id="${escapeHtml(word.id)}" title="Listen in Hindi">🔊 Listen</button>
             <button class="btn secondary" type="button" data-action="edit-word" data-id="${escapeHtml(word.id)}">Edit</button>
             <button class="btn secondary" type="button" data-action="delete-word" data-id="${escapeHtml(word.id)}">Delete</button>
           </div>
@@ -785,7 +813,9 @@
     const id = button.dataset.id;
     const word = findWord(id);
 
-    if (button.dataset.action === 'edit-word' && word) {
+    if (button.dataset.action === 'listen-word' && word) {
+      speakHindi(word);
+    } else if (button.dataset.action === 'edit-word' && word) {
       openWordForm(word);
     } else if (button.dataset.action === 'delete-word' && word) {
       const ok = window.confirm(`Delete "${word.english}" (${word.hindi})?`);
@@ -802,6 +832,10 @@
   });
 
   $('addWordBtn').addEventListener('click', () => openWordForm());
+  wordSearch.addEventListener('input', () => {
+    wordSearchQuery = wordSearch.value;
+    renderWordList();
+  });
   $('cancelWord').addEventListener('click', closeWordForm);
   $('exportWords').addEventListener('click', exportWords);
   $('importWords').addEventListener('click', () => $('importFile').click());

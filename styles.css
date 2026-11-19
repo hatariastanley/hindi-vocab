@@ -419,7 +419,23 @@ input {
 .words-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
+}
+
+.word-search {
+  border: 2px solid #dbeafe;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  font-weight: 800;
+  min-width: 180px;
+}
+
+.word-search:focus {
+  outline: none;
+  border-color: var(--primary-2);
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.12);
 }
 
 .word-form-wrap {

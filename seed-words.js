@@ -110,5 +110,31 @@ window.HINDI_SEED_WORDS = [
   { id: 'seed-capsicum', english: 'capsicum', hindi: 'शिमला मिर्च', transliteration: 'shimla mirch', emoji: '🫑', audio: 'assets/audio/seed-capsicum.mp3' },
   { id: 'seed-garlic', english: 'garlic', hindi: 'लहसुन', transliteration: 'lahsun', emoji: '🧄', audio: 'assets/audio/seed-garlic.mp3' },
   { id: 'seed-beetroot', english: 'beetroot', hindi: 'चुकंदर', transliteration: 'chukandar', emoji: '🟣', audio: 'assets/audio/seed-beetroot.mp3' },
-  { id: 'seed-cauliflower', english: 'cauliflower', hindi: 'फूलगोभी', transliteration: 'phool gobhi', emoji: '🥗', audio: 'assets/audio/seed-cauliflower.mp3' }
+  { id: 'seed-cauliflower', english: 'cauliflower', hindi: 'फूलगोभी', transliteration: 'phool gobhi', emoji: '🥗', audio: 'assets/audio/seed-cauliflower.mp3' },
+
+  { id: 'seed-namaskar', english: 'Greetings!', hindi: 'नमस्कार!', transliteration: 'namaskar!', emoji: '🤝', audio: 'assets/audio/seed-namaskar.mp3' },
+  { id: 'seed-sorry', english: 'Sorry!', hindi: 'माफ़ कीजिए!', transliteration: 'maaf kijiye!', emoji: '😔', audio: 'assets/audio/seed-sorry.mp3' },
+  { id: 'seed-yes', english: 'Yes!', hindi: 'जी हाँ!', transliteration: 'ji haan!', emoji: '👍', audio: 'assets/audio/seed-yes.mp3' },
+  { id: 'seed-no', english: 'No!', hindi: 'नहीं!', transliteration: 'nahin!', emoji: '👎', audio: 'assets/audio/seed-no.mp3' },
+  { id: 'seed-aap-kaise-hain', english: 'How are you? (polite)', hindi: 'आप कैसे हैं?', transliteration: 'aap kaise hain?', emoji: '🙋', audio: 'assets/audio/seed-aap-kaise-hain.mp3' },
+  { id: 'seed-my-name-simmi', english: 'My name is Simmi', hindi: 'मेरा नाम सिम्मी है', transliteration: 'mera naam Simmi hai', emoji: '📛', audio: 'assets/audio/seed-my-name-simmi.mp3' },
+  { id: 'seed-i-need-water', english: 'I need water', hindi: 'मुझे पानी चाहिए!', transliteration: 'mujhe paani chahiye!', emoji: '💧', audio: 'assets/audio/seed-i-need-water.mp3' },
+  { id: 'seed-i-need-apple', english: 'I need an apple', hindi: 'मुझे सेब चाहिए!', transliteration: 'mujhe seb chahiye!', emoji: '🍎', audio: 'assets/audio/seed-i-need-apple.mp3' },
+  { id: 'seed-what-is-this', english: 'What is this?', hindi: 'यह क्या है?', transliteration: 'yeh kya hai?', emoji: '❓', audio: 'assets/audio/seed-what-is-this.mp3' },
+  { id: 'seed-yes-i-am-fine', english: 'Yes, I am fine', hindi: 'हाँ, मैं ठीक हूँ।', transliteration: 'haan, main theek hoon.', emoji: '🙂', audio: 'assets/audio/seed-yes-i-am-fine.mp3' },
+  { id: 'seed-listen', english: 'Listen', hindi: 'सुनो।', transliteration: 'suno.', emoji: '👂', audio: 'assets/audio/seed-listen.mp3' },
+  { id: 'seed-come-here', english: 'Come here', hindi: 'यहाँ आओ।', transliteration: 'yahan aao.', emoji: '👉', audio: 'assets/audio/seed-come-here.mp3' },
+  { id: 'seed-shukriya', english: 'Thank you (shukriya)', hindi: 'शुक्रिया।', transliteration: 'shukriya.', emoji: '🌸', audio: 'assets/audio/seed-shukriya.mp3' },
+  { id: 'seed-i-am-ravi', english: 'I am Ravi', hindi: 'मैं रवि हूँ।', transliteration: 'main Ravi hoon.', emoji: '🙋', audio: 'assets/audio/seed-i-am-ravi.mp3' },
+
+  { id: 'seed-kitchen-phal-dhona', english: 'washing fruits', hindi: 'फल धोना', transliteration: 'phal dhona', emoji: '🧺', audio: 'assets/audio/seed-kitchen-phal-dhona.mp3' },
+  { id: 'seed-kitchen-sabzi-fruit-sort', english: 'sorting vegetables and fruits', hindi: 'सब्ज़ी और फल अलग करना', transliteration: 'sabzi aur phal alag karna', emoji: '🗂️', audio: 'assets/audio/seed-kitchen-sabzi-fruit-sort.mp3' },
+  { id: 'seed-kitchen-peel-carrots', english: 'peeling carrots', hindi: 'गाजर छीलना', transliteration: 'gajar chheelna', emoji: '🥕', audio: 'assets/audio/seed-kitchen-peel-carrots.mp3' },
+  { id: 'seed-kitchen-cut-vegetables', english: 'cutting vegetables', hindi: 'सब्ज़ी काटना', transliteration: 'sabzi kaatna', emoji: '🔪', audio: 'assets/audio/seed-kitchen-cut-vegetables.mp3' },
+  { id: 'seed-kitchen-orange-juice', english: 'making orange juice', hindi: 'संतरे का रस निकालना', transliteration: 'santre ka ras nikalna', emoji: '🧃', audio: 'assets/audio/seed-kitchen-orange-juice.mp3' },
+  { id: 'seed-kitchen-cook-vegetables', english: 'cooking vegetables', hindi: 'सब्ज़ी पकाना', transliteration: 'sabzi pakaana', emoji: '🍲', audio: 'assets/audio/seed-kitchen-cook-vegetables.mp3' },
+  { id: 'seed-kitchen-fridge', english: 'storing in fridge', hindi: 'फ्रिज में रखना', transliteration: 'fridge mein rakhna', emoji: '🧊', audio: 'assets/audio/seed-kitchen-fridge.mp3' },
+  { id: 'seed-kitchen-salad', english: 'making salad', hindi: 'सलाद बनाना', transliteration: 'salaad banana', emoji: '🥗', audio: 'assets/audio/seed-kitchen-salad.mp3' },
+  { id: 'seed-kitchen-fruit-snack', english: 'fruit snack', hindi: 'फल का नाश्ता', transliteration: 'phal ka nashta', emoji: '🍇', audio: 'assets/audio/seed-kitchen-fruit-snack.mp3' },
+  { id: 'seed-kitchen-eat-meal', english: 'eating meal', hindi: 'खाना खाना', transliteration: 'khana khana', emoji: '🍽️', audio: 'assets/audio/seed-kitchen-eat-meal.mp3' }
 ];
